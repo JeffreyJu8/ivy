@@ -123,7 +123,6 @@ def abs(
         b: ivy.array([4.5, 5.3, 0., 2.3])
     }
     """
-
     return ivy.current_backend(x).abs(x, out=out)
 
 
@@ -421,7 +420,7 @@ def add(
 
     For complex floating-point operands, the real valued floating-point
     special cases must independently apply to the real and
-    imaginary component operation invloving real numbers as
+    imaginary component operation involving real numbers as
     described in the above table. For example, let ``a = real(x1_i)``,
     ``c = real(x2_i)``, ``d = imag(x2_i)``,
     and
@@ -515,7 +514,7 @@ def asin(
     """
     Calculate an implementation-dependent approximation of the principal value of the
     inverse sine, having domain ``[-1, +1]`` and codomain ``[-π/2, +π/2]`` for each
-    element ``x_i`` of the input array ``x``. Each element-wise result is expressed in
+    element ``x_i`` of the input array ``x``. Each element- wise result is expressed in
     radians.
 
     **Special cases**
@@ -4212,7 +4211,7 @@ def log2(
     - If ``x_i`` is ``1``, the result is ``+0``.
     - If ``x_i`` is ``+infinity``, the result is ``+infinity``.
 
-    For complex floating-point operands, special cases must be hanled as if
+    For complex floating-point operands, special cases must be handled as if
     the operation is implemented using the standard change of base formula
 
     .. math::

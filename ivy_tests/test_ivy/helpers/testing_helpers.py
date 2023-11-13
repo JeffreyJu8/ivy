@@ -24,6 +24,7 @@ from ivy_tests.test_ivy.helpers.test_parameter_flags import (
     BuiltGradientStrategy,
     BuiltContainerStrategy,
     BuiltWithOutStrategy,
+    BuiltWithCopyStrategy,
     BuiltInplaceStrategy,
     BuiltTraceStrategy,
     BuiltFrontendArrayStrategy,
@@ -224,7 +225,7 @@ def _get_method_supported_devices_dtypes(
 
     Returns
     -------
-    Returns a dictonary containing supported device types and its supported data types
+    Returns a dictionary containing supported device types and its supported data types
     for the method
     """
     supported_device_dtypes = {}
@@ -290,7 +291,7 @@ def _get_supported_devices_dtypes(fn_name: str, fn_module: str):
 
     Returns
     -------
-    Returns a dictonary containing supported device types and its supported data types
+    Returns a dictionary containing supported device types and its supported data types
     for the function
     """
     supported_device_dtypes = {}
@@ -335,6 +336,7 @@ def handle_test(
     number_positional_args=None,
     test_instance_method=BuiltInstanceStrategy,
     test_with_out=BuiltWithOutStrategy,
+    test_with_copy=BuiltWithCopyStrategy,
     test_gradients=BuiltGradientStrategy,
     test_trace=BuiltTraceStrategy,
     transpile=BuiltTranspileStrategy,
@@ -366,6 +368,10 @@ def handle_test(
 
     test_with_out
         A search strategy that generates a boolean to test the function with an `out`
+        parameter
+
+    test_with_copy
+        A search strategy that generates a boolean to test the function with an `copy`
         parameter
 
     test_gradients
@@ -408,6 +414,7 @@ def handle_test(
             num_positional_args=number_positional_args,
             instance_method=_get_runtime_flag_value(test_instance_method),
             with_out=_get_runtime_flag_value(test_with_out),
+            with_copy=_get_runtime_flag_value(test_with_copy),
             test_gradients=_get_runtime_flag_value(test_gradients),
             test_trace=_get_runtime_flag_value(test_trace),
             transpile=_get_runtime_flag_value(transpile),
@@ -472,6 +479,7 @@ def handle_frontend_test(
     aliases: List[str] = None,
     number_positional_args=None,
     test_with_out=BuiltWithOutStrategy,
+    test_with_copy=BuiltWithCopyStrategy,
     test_inplace=BuiltInplaceStrategy,
     as_variable_flags=BuiltAsVariableStrategy,
     native_array_flags=BuiltNativeArrayStrategy,
@@ -503,6 +511,10 @@ def handle_frontend_test(
 
     test_with_out
         A search strategy that generates a boolean to test the function with an `out`
+        parameter
+
+    test_with_copy
+        A search strategy that generates a boolean to test the function with an `copy`
         parameter
 
     precision_mode
@@ -539,6 +551,7 @@ def handle_frontend_test(
         test_flags = pf.frontend_function_flags(
             num_positional_args=number_positional_args,
             with_out=_get_runtime_flag_value(test_with_out),
+            with_copy=_get_runtime_flag_value(test_with_copy),
             inplace=_get_runtime_flag_value(test_inplace),
             as_variable=_get_runtime_flag_value(as_variable_flags),
             native_arrays=_get_runtime_flag_value(native_array_flags),
@@ -764,7 +777,7 @@ def handle_frontend_method(
         Name of the method
 
     init_num_positional_args
-        A search startegy that generates a number of positional arguments
+        A search strategy that generates a number of positional arguments
         to be passed during instantiation of the class
 
     init_native_arrays
@@ -784,7 +797,7 @@ def handle_frontend_method(
         precision modes supported by numpy and (torch, jax) and test the function
 
     method_num_positional_args
-        A search startegy that generates a number of positional arguments
+        A search strategy that generates a number of positional arguments
         to be passed during call of the class method
 
     method_native_arrays

@@ -685,7 +685,7 @@ def kronecker(
     return res
 
 
-# The code has been adapated from tensorly.khatri_rao
+# The code has been adapted from tensorly.khatri_rao
 # https://github.com/tensorly/tensorly/blob/main/tensorly/tenalg/core_tenalg/_khatri_rao.py#L9
 @handle_nestable
 @handle_exceptions
@@ -881,7 +881,7 @@ def mode_dot(
         return ivy.fold(res, fold_mode, new_shape, out=out)
 
 
-# The following code has been adapated from TensorLy
+# The following code has been adapted from TensorLy
 # https://github.com/tensorly/tensorly/blob/main/tensorly/tenalg/core_tenalg/n_mode_product.py#L81
 @handle_nestable
 @handle_exceptions
@@ -1006,7 +1006,7 @@ def _svd_checks(x, n_eigenvecs=None):
     return n_eigenvecs, min_dim, max_dim
 
 
-# This function has been adapated from TensorLy
+# This function has been adapted from TensorLy
 # https://github.com/tensorly/tensorly/blob/main/tensorly/tenalg/svd.py#L12
 @handle_nestable
 @handle_exceptions
@@ -1160,8 +1160,8 @@ def make_svd_non_negative(
         H = ivy.soft_thresholding(H, eps)
     elif nntype == "nndsvda":
         avg = ivy.mean(x)
-        W = ivy.where(W < eps, ivy.ones(ivy.shape(W)) * avg, W)
-        H = ivy.where(H < eps, ivy.ones(ivy.shape(H)) * avg, H)
+        W = ivy.where(eps > W, ivy.ones(ivy.shape(W)) * avg, W)
+        H = ivy.where(eps > H, ivy.ones(ivy.shape(H)) * avg, H)
     else:
         raise ValueError(
             f'Invalid nntype parameter: got {nntype} instead of one of ("nndsvd",'
@@ -1296,7 +1296,7 @@ def tensor_train(
     return ivy.TTTensor(factors)
 
 
-# TODO uncommment the code below when these svd
+# TODO uncomment the code below when these svd
 # methods have been added
 def _svd_interface(
     matrix,
@@ -1404,7 +1404,7 @@ def initialize_tucker(
         assert len(x.shape) >= 2
     except ValueError:
         raise ValueError(
-            "expected x to have atleast 2 dimensions but it has only"
+            "expected x to have at least 2 dimensions but it has only"
             f" {len(x.shape)} dimension(s)"
         )
 
@@ -1453,7 +1453,7 @@ def initialize_tucker(
     return (core, factors)
 
 
-# This function has been adpated from TensorLy
+# This function has been adapted from TensorLy
 # https://github.com/tensorly/tensorly/blob/main/tensorly/decomposition/_tucker.py#L98
 @handle_nestable
 @handle_exceptions
@@ -1695,13 +1695,13 @@ def tucker(
             return ivy.TuckerTensor((core, factors))
 
         fixed_factors = sorted(fixed_factors)
-        modes_fixed, factors_fixed = zip(
-            *[(i, f) for (i, f) in enumerate(factors) if i in fixed_factors]
-        )
+        modes_fixed, factors_fixed = zip(*[
+            (i, f) for (i, f) in enumerate(factors) if i in fixed_factors
+        ])
         core = multi_mode_dot(core, factors_fixed, modes=modes_fixed)
-        modes, factors = zip(
-            *[(i, f) for (i, f) in enumerate(factors) if i not in fixed_factors]
-        )
+        modes, factors = zip(*[
+            (i, f) for (i, f) in enumerate(factors) if i not in fixed_factors
+        ])
         init = (core, list(factors))
 
         rank = ivy.TuckerTensor.validate_tucker_rank(x.shape, rank=rank)

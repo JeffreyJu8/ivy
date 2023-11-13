@@ -36,7 +36,7 @@ if "ARRAY_API_TESTS_MODULE" not in os.environ:
 
 def default_framework_mapper(fw, fw_path="/opt/fw/", set_too=False):
     # do a path search, get the latest
-    # so that we can get the higest version
+    # so that we can get the highest version
     # available dynamically and set that for
     # use by the rest of the code
     # eg: torch/1.11.0 and torch/1.12.0
@@ -191,7 +191,7 @@ def pytest_configure(config):
             if "/" in backend_str:
                 backend_str = backend_str.split("/")[0]
             if (
-                backend_str in UNSUPPORTED_FRAEMWORK_DEVICES.keys()
+                backend_str in UNSUPPORTED_FRAEMWORK_DEVICES
                 and device.partition(":")[0]
                 in UNSUPPORTED_FRAEMWORK_DEVICES[backend_str]
             ):
