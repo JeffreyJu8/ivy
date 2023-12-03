@@ -142,7 +142,8 @@ class Tensor:
                 return torch_frontend.reshape(self, shape)
             else:
                 return torch_frontend.reshape(self, args)
-        return torch_frontend.reshape(self)
+        else:
+            raise ValueError("reshape() got no values for argument 'shape'")
 
     @with_unsupported_dtypes({"2.1.1 and below": ("bfloat16",)}, "torch")
     @with_unsupported_dtypes({"2.5.1 and below": ("float16",)}, "paddle")
@@ -792,7 +793,7 @@ class Tensor:
         return self
 
     def size(self, dim=None):
-        shape = self.shape
+        shape = self.ivy_array.shape
         if dim is None:
             return shape
         try:
@@ -848,7 +849,8 @@ class Tensor:
                 return torch_frontend.permute(self, dims)
             else:
                 return torch_frontend.permute(self, args)
-        return torch_frontend.permute(self)
+        else:
+            raise ValueError("permute() got no values for argument 'dims'")
 
     @numpy_to_torch_style_args
     @with_unsupported_dtypes({"2.1.1 and below": ("float16", "bfloat16")}, "torch")
@@ -2014,6 +2016,10 @@ class Tensor:
             self._ivy_array, ivy.astype(ret, self._ivy_array.dtype)
         )
         return self
+
+    @with_supported_dtypes({"2.1.1 and below": ("float32", "float64")}, "torch")
+    def frac(self, name=None):
+        return torch_frontend.frac(self._ivy_array)
 
     @with_unsupported_dtypes(
         {
